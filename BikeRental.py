@@ -34,6 +34,15 @@ class BikeRental:
         if self.user_info["num_of_bikes"] < self.stock:
             self.stock += self.user_info["num_of_bikes"]
             print("You have returned {} bikes".format(self.user_info["num_of_bikes"]))
+            if self.user_info['family_promotion']:
+                return ((self.user_info["num_of_bikes"]
+                * self.user_info["bike_rent_dur"]
+                * self.rates[self.user_info["type"]]) -
+                        0.3 * (
+                self.user_info["num_of_bikes"]
+                * self.user_info["bike_rent_dur"]
+                * self.rates[self.user_info["type"]]
+            ))
             return (
                 self.user_info["num_of_bikes"]
                 * self.user_info["bike_rent_dur"]
@@ -49,6 +58,8 @@ class BikeRental:
         if self.user_info["num_of_bikes"] < 1:
             print("Invalid number")
         else:
+            if 3 >= self.user_info["num_of_bikes"] <= 5:
+                self.user_info["family_promotion"] = True
             if self.user_info["num_of_bikes"] > self.stock:
                 print("We currently have only {} bikes to rent".format(self.stock))
                 return
@@ -64,6 +75,7 @@ class Customer:
         self.user_info["type"] = type
         self.user_info["bike_rent_dur"] = bike_rent_dur
         self.user_info["num_of_bikes"] = num_of_bikes
+        self.user_info["family_promotion"] = False
         self.bike_shop = BikeRental(self.user_info)
 
     def see_available_bikes(self):
@@ -79,7 +91,7 @@ class Customer:
 
 
 if __name__ == "__main__":
-    customer_obj = Customer(1, "daily", 2, 103)
+    customer_obj = Customer(1, "daily", 2, 3)
     customer_obj.see_available_bikes()
     customer_obj.rent_bike()
     customer_obj.see_available_bikes()
